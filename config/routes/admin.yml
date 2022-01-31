@@ -1,0 +1,7 @@
+admin_login:
+  path:  /admin/login
+  defaults: { _controller: App\Controller\Backend\SecurityController:login }
+
+admin_logout:
+  path:  /admin/logout
+  defaults: { _controller: App\Controller\Backend\SecurityController:logout }

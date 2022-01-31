@@ -1,0 +1,106 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% block page_title %}
+    {% trans %}Uczestnicy{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#main-tab" data-toggle="tab">{% trans %}Podstawowe informacje{% endtrans %}</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="main-tab" class="tab-pane active">
+                                    {{ form_row(form.expireAt) }}
+                                    <hr />
+                                    <strong>Podsumowanie</strong>
+                                    <hr />
+                                    <h6>Status zachowań żywieniowych</h6>
+                                    Ocena: {{ item.statusFood|dictionary('status_food') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusFood|dictionary('recomendations_food') }}<br />
+                                    <hr />
+                                    <h6>Status nikotynowy</h6>
+                                    Ocena: {{ item.statusNicotine|dictionary('status_nicotine') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusNicotine|dictionary('recomendations_nicotine') }}<br />
+                                    <hr />
+                                    <h6>Status uodpornienia</h6>
+                                    Ocena: {{ item.statusImmune|dictionary('status_immune') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusImmune|dictionary('recomendations_immune') }}<br />
+                                    <hr />
+                                    <h6>Status jakości snu i wypoczynku</h6>
+                                    Ocena: {{ item.statusSleep|dictionary('status_sleep') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusSleep|dictionary('recomendations_sleep') }}<br />
+                                    <hr />
+                                    <h6>Status higieny cyfrowej</h6>
+                                    Ocena: {{ item.statusDigital|dictionary('status_digital') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusDigital|dictionary('recomendations_digital') }}<br />
+                                    <hr />
+                                    <h6>Status kompetencji społecznych – styl adaptacji</h6>
+                                    Ocena: {{ item.statusAdaptation|dictionary('status_adaptation') }}<br />
+                                    Zalecenia:
+                                    {{ item.statusAdaptation|dictionary('recomendations_adaptation') }}<br />
+                                    <hr />
+                                    <h6>Status kompetencji społecznych – zachowania eksternalizacyjne</h6>
+                                    Ocena: {{ survey.statusExternal|dictionary('status_external') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusExternal|dictionary('recomendations_external') }}<br />
+                                    <hr />
+                                    <h6>Status rozwoju emocjonalnego – reakcja na nowość</h6>
+                                    Ocena: {{ survey.statusNewness|dictionary('status_newness') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusNewness|dictionary('recomendations_newness') }}<br />
+                                    <hr />
+                                    <h6>Status rozwoju emocjonalnego – koncentracja</h6>
+                                    Ocena: {{ survey.statusFocus|dictionary('status_focus') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusFocus|dictionary('recomendations_focus') }}<br />
+                                    <hr />
+                                    <h6>Status masy ciała</h6>
+                                    Ocena: {{ survey.statusWeight|dictionary('status_weight') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusWeight|dictionary('recomendations_weight') }}<br />
+                                    <hr />
+                                    <h6>Status aktywności fizycznej</h6>
+                                    Ocena: {{ survey.statusActivity|dictionary('status_activity') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusActivity|dictionary('recomendations_activity') }}<br />
+                                    <hr />
+                                    <h6>Status sprawności fizycznej</h6>
+                                    Ocena: {{ survey.statusFitness|dictionary('status_fitness') }}<br />
+                                    Zalecenia:
+                                    {{ survey.statusFitness|dictionary('recomendations_fitness') }}<br />
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.submit) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('input[name="participant[expireAt]"]').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: 'pl'
+            });
+        });
+    </script>
+{% endblock %}

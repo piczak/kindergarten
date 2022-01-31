@@ -1,0 +1,54 @@
+
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% block page_title %}
+    {% trans %}Linki{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#main-tab" data-toggle="tab">{% trans %}Podstawowe informacje{% endtrans %}</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="main-tab" class="tab-pane active">
+                                    {{ form_row(form.kindergarten) }}
+                                    {{ form_row(form.startAt) }}
+                                    {{ form_row(form.endAt) }}
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.submit) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('input[name="link[startAt]"]').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: 'pl'
+            });
+
+            jQuery('input[name="link[endAt]"]').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: 'pl'
+            });
+
+
+        });
+    </script>
+{% endblock %}

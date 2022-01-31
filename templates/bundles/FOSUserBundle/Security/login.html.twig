@@ -1,0 +1,18 @@
+{% extends '@AdminLTE/FOSUserBundle/Security/login.html.twig' %}
+
+{% block title %}CMS{% endblock %}
+
+{% block logo_login %}download.net.pl{% endblock %}
+
+{% block login_box_icon %}{% endblock %}
+
+{% block login_box_msg %}
+    {{ 'Zaloguj się'|trans({}, 'AdminLTEBundle') }}
+{% endblock %}
+
+{% block login_form %}
+    {{ parent() }}
+    <div class="text-center">
+        <span class="text-gray">powered by</span> <a href="http://xweb.software" target="_blank"><span class="xs-text-logo text-bold"><span class="text-black">xweb</span><span class="text-green">software</span></span></a>
+    </div>
+{% endblock %}

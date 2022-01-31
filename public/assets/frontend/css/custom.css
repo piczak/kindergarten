@@ -1,0 +1,64 @@
+body {
+    background-color: #fff;
+}
+
+.bg-light {
+    background-color: #fff !important;
+}
+
+.title-bar {
+    border-color: #b71010;
+    background-color: #0098da;
+    height: 60px;
+    padding: 0 10px;
+    border-top: 1px solid #d2d3d4;
+    border-botton: 1px solid #d2d3d4;
+}
+
+.title-wrapper {
+    display: table;
+    z-index: 1;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.title-captions {
+    display: table-cell;
+    vertical-align: middle;
+    width: 45%;
+}
+
+.title-bar h1 {
+    font-size: 26px;
+    line-height: normal;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+footer {
+    color: #8C8989 !important;
+    border-top: 12px solid #e9eaee;
+    background-color: #363839;
+    padding-top: 43px;
+    padding-bottom: 40px;
+}
+
+.fa-facebook-square {
+    color: rgb(59, 91, 152);
+}
+
+.craue_formflow_done_step {
+    color: #00a65a;
+    font-weight: bold;
+}
+
+.craue_formflow_skipped_step {
+    color: #5e5e5e;
+    font-weight: bold;
+}
+
+.craue_formflow_current_step {
+    color: #0d6aad;
+    font-weight: bold;
+}

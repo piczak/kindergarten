@@ -1,0 +1,62 @@
+{% trans_default_domain 'messages_backend' %}
+
+{% extends '@AdminLTE/layout/default-layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/mygosumenu/dynamictree/DynamicTree.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/uploadifive/uploadifive.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/common/css/fontawesome-iconpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/common/css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/backend/css/custom.css') }}">
+{% endblock %}
+
+{% block logo_mini %}CMS{% endblock %}
+
+{% block logo_large %}CMS{% endblock %}
+
+{% block sidebar_search %}{% endblock %}
+
+{% block page_subtitle %}{% endblock %}
+
+{% block footer %}
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <span class="text-gray">powered by</span> <a href="http://xweb.software" target="_blank"><span class="xs-text-logo text-bold"><span class="text-black">xweb</span><span class="text-green">software</span></span></a>
+        </div>
+        <strong>Copyright &copy; {{ 'now'|date('Y') }}.</strong> All rights reserved.
+    </footer>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.2/URI.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+
+    <script src="{{ asset('assets/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/mygosumenu/dynamictree/CheckboxTree.js') }}"></script>
+    <script src="{{ asset('assets/vendor/uploadifive/jquery.uploadifive.js') }}"></script>
+    <script src="{{ asset('assets/vendor/mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/common/js/jquery.collection.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('assets/common/js/fontawesome-iconpicker.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/jquery.custom.js') }}"></script>
+{% endblock %}

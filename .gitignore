@@ -1,0 +1,5 @@
+vendor/
+var/cache/
+var/log/
+.idea/
+.env

@@ -1,0 +1,37 @@
+{% block xweb_choice_tree_widget %}
+    <div class="DynamicTree">
+        <div class="top">&nbsp;</div>
+        <div class="wrap" id="tree{% if not multiple %}Radio{% endif %}">
+            {% for choice in choices_tree %}
+                {{ block('xweb_choice_tree_item_widget') }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock xweb_choice_tree_widget %}
+
+{% block xweb_choice_tree_item_widget %}
+    {% set has_children = choice[choice_children] is defined %}
+
+    {% set is_checked = 'false' %}
+    {% if multiple %}
+        {% if choice[choice_value] in selected_values %}
+            {% set is_checked = 'true' %}
+        {% endif %}
+    {% else %}
+        {% if selected_values and choice[choice_value] == attribute(selected_values[0], choice_value) %}
+            {% set is_checked = 'true' %}
+        {% endif %}
+    {% endif %}
+
+    {% if has_children %}
+        <div class="folder" data-id="{{ choice[choice_value] }}" data-type="{% if multiple %}checkbox{% else %}radio{% endif %}" data-checked="{{ is_checked }}"> {{ choice[choice_label] }}
+            {% for item in choice[choice_children] %}
+                {% set choice = item %}
+                {{ block('xweb_choice_tree_item_widget') }}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="doc" data-id="{{ choice[choice_value] }}" data-type="{% if multiple %}checkbox{% else %}radio{% endif %}" data-disabled="{% if disabled or choice[choice_value] in disabled_values %}true{% else %}false{% endif %}" data-checked="{{ is_checked }}">{{ choice[choice_label] }}</div>
+    {% endif %}
+{% endblock xweb_choice_tree_item_widget %}
+

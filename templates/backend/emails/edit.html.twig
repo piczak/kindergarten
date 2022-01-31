@@ -1,0 +1,29 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% block page_title %}Szablony e-mail{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="alert alert-info">
+                        W treści można używać tagi <a href="https://twig.symfony.com/">TWIG'a</a>
+                    </div>
+                    {{ form_start(form) }}
+                        {{ form_row(form.subject) }}
+                        {{ form_row(form.contentHtml) }}
+                        {{ form_row(form.contentText) }}
+                        <div class="form-group">
+                            <label class="control-label">Tagi</label>
+                            <div>
+                                {{ item.tags|raw }}
+                            </div>
+                        </div>
+                        {{ form_row(form.submit) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

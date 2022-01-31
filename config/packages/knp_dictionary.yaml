@@ -1,0 +1,178 @@
+knp_dictionary:
+    dictionaries:
+        empty:
+            type: 'key_value'
+
+        status_food:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowy sposób odżywiania'
+                2: 'Sposób odżywiania wymagający niewielkich modyfikacji'
+                3: 'Sposób odżywiania wymagający poważnych zmian'
+
+        recomendations_food:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+        status_nicotine:
+            type: 'key_value'
+            content:
+                1: 'Brak narażenia na dym tytoniowy'
+                2: 'Ma miejsce narażenie na dym tytoniowy'
+
+        recomendations_nicotine:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+
+        status_immune:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowy status uodpornienia'
+                2: 'Nieprawidłowy status uodpornienia'
+
+        recomendations_immune:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+
+        status_sleep:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowa jakość snu i wypoczynku'
+                2: 'Jakość snu i wypoczynku wymaga poprawy'
+                3: 'Jakość snu i wypoczynku wymaga całkowitej zmiany'
+
+        recomendations_sleep:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+        status_digital:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowa higiena cyfrowa'
+                2: 'Higiena cyfrowa wymaga poprawy'
+                3: 'Higiena cyfrowa wymaga całkowitej zmiany'
+
+        recomendations_digital:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+        status_adaptation:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowy styl adaptacji'
+                2: 'Styl adaptacji wymaga poprawy'
+                3: 'Styl adaptacji wymaga całkowitej zmiany'
+
+        recomendations_adaptation:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+        status_external:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowe zachowania eksternalizacyjne'
+                2: 'Zachowania eksternalizacyjne wymagają poprawy'
+                3: 'Zachowania eksternalizacyjne wymagają całkowitej zmiany'
+
+        recomendations_external:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+
+        status_newness:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowa reakcja na nowość'
+                2: 'Reakcja na nowość wymaga poprawy'
+                3: 'Reakcja na nowość wymaga całkowitej zmiany'
+
+        recomendations_newness:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+        status_focus:
+            type: 'key_value'
+            content:
+                1: 'Prawidłowa koncentracja uwagi'
+                2: 'Koncentracja uwagi wymaga poprawy'
+                3: 'Koncentracja uwagi wymaga całkowitej zmiany'
+
+        recomendations_focus:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+
+        status_weight:
+            type: 'key_value'
+            content:
+                1: 'Znaczna niedowaga'
+                2: 'Niedowaga'
+                3: 'Szczupłość'
+                4: 'Masa ciała w normie'
+                5: 'Nadwaga'
+                6: 'Otyłość'
+
+        recomendations_weight:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+
+        status_activity:
+            type: 'key_value'
+            content:
+                1: 'Odpowiedni poziom aktywności fizycznej'
+                2: 'Za niski poziom aktywności fizycznej'
+
+        recomendations_activity:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+
+        status_fitness:
+            type: 'key_value'
+            content:
+                1: 'Sprawność fizyczna odpowiednia do wieku'
+                2: 'Wskazana poprawa sprawności fizycznej'
+                3: 'Konieczna poprawa sprawności fizycznej'
+
+        recomendations_fitness:
+            type: 'key_value'
+            content:
+                1: 'Rekomendacja 1'
+                2: 'Rekomendacja 2'
+                3: 'Rekomendacja 3'
+
+
+
+
+
+

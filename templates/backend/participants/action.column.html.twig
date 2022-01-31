@@ -1,0 +1,17 @@
+<div class="text-center">
+    {% if row.finishedAt %}
+    <a href="{{ path('frontend.individual.summary', {'hash': row.hash}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-check-square"></i>
+    </a>
+    {% endif %}
+    
+    {#
+    <a href="{{ path('admin.participants.edit', {'id': row.id}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-pencil-alt"></i>
+    </a>
+    #}
+    
+    <a href="#" data-href="{{ path('admin.participants.delete', {'id': row.id}) }}" class="btn btn-sm btn-danger confirmDelete">
+        <i class="fa fa-trash"></i>
+    </a>
+</div>

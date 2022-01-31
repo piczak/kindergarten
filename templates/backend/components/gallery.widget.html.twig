@@ -1,0 +1,30 @@
+{% block images_label %}{% endblock %}
+
+{% block images_widget %}
+    <hr>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group">
+                {{ form_label(form.image) }}
+                <div class="input-group">
+                    {{ form_widget(form.image) }}
+                    <span class="input-group-btn">
+                        <a href="/assets/vendor/filemanager/dialog.php?type=1&field_id=article_images___name___image" data-fancybox data-type="iframe" class="select-file btn btn-primary">
+                            ...
+                        </a>
+                        <a href="#" class="collection-remove btn btn-danger" title="Delete">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <a href="#" class="collection-up btn btn-default" title="Move up"><span class="glyphicon glyphicon-arrow-up"></span></a>
+            <a href="#" class="collection-down btn btn-default" title="Move down"><span class="glyphicon glyphicon-arrow-down"></span></a>
+        </div>
+        <div class="col-md-3">
+            <a href="#" class="collection-add btn btn-default" title="Add"><span class="glyphicon glyphicon-plus-sign"></span></a>
+        </div>
+    </div>
+{% endblock %}

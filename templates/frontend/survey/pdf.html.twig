@@ -1,0 +1,204 @@
+{% extends 'frontend/layout.pdf.html.twig' %}
+
+{% block page_title %}
+    <h2>Zdrowy Przedszkolak</h2>
+    <h3>Podsumowanie badania</h3>
+    <h4>Behawioralny profil zdrowotny dziecka z planem postępowania zdrowotnego</h4>
+	<hr/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h4>Imię dziecka: <b>{{ survey.childFirstname }}</b></h4>
+                <h4>Data urodzenia: <b>{{ survey.birthAt|date('Y-m-d') }}</b></h4>
+                <h4>Data badania: <b>{{ survey.finishedAt|date('Y-m-d') }}</b></h4>
+		</div>
+	    <div class="col-8">
+		<h5><span class="badge badge-{% if survey.statusFood == 1 %}success{% elseif survey.statusFood == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusFood|dictionary('status_food') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusWeight in [3, 4] %}success{% elseif survey.statusWeight == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusWeight|dictionary('status_weight') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusActivity == 1 %}success{% else %}danger{% endif %}">{{ survey.statusActivity|dictionary('status_activity') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusFitness == 1 %}success{% elseif survey.statusFitness == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusFitness|dictionary('status_fitness') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusNicotine == 1 %}success{% else %}danger{% endif %}">{{ survey.statusNicotine|dictionary('status_nicotine') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusImmune == 1 %}success{% else %}danger{% endif %}">{{ survey.statusImmune|dictionary('status_immune') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusSleep == 1 %}success{% elseif survey.statusSleep == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusSleep|dictionary('status_sleep') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusDigital == 1 %}success{% elseif survey.statusDigital == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusDigital|dictionary('status_digital') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusAdaptation == 1 %}success{% elseif survey.statusAdaptation == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusAdaptation|dictionary('status_adaptation') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusExternal == 1 %}success{% elseif survey.statusExternal == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusExternal|dictionary('status_external') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusNewness == 1 %}success{% elseif survey.statusNewness == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusNewness|dictionary('status_newness') }}</span></h5>
+		<h5><span class="badge badge-{% if survey.statusFocus == 1 %}success{% elseif survey.statusFocus == 2 %}warning{% else %}danger{% endif %}">{{ survey.statusFocus|dictionary('status_focus') }}</span></h5>
+	    </div>
+        </div>
+	<div class="row">
+            <div class="col">
+                <hr />
+                
+				<h3>Status zachowań żywieniowych</h3>
+				<div class="alert {% if survey.statusFood == 1 %}alert-success{% elseif survey.statusFood == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusFood|dictionary('status_food') }}
+				</div>
+				<h5>Zalecenia</h5>
+				<ul>
+					<li>{{ sett.setting('food.breakfast.' ~ survey.foodBreakfast)|raw }}</li>
+					<li>{{ sett.setting('food.dinner.' ~ survey.foodDinner)|raw }}</li>
+					<li>{{ sett.setting('food.grain.' ~ survey.foodGrain)|raw }}</li>
+					<li>{{ sett.setting('food.diary.' ~ survey.foodDiary)|raw }}</li>
+					<li>{{ sett.setting('food.fruits.' ~ survey.foodFruits)|raw }}</li>
+					<li>{{ sett.setting('food.vegetables.' ~ survey.foodVegetables)|raw }}</li>
+					<li>{{ sett.setting('food.meat.' ~ survey.foodMeat)|raw }}</li>
+					<li>{{ sett.setting('food.fastfood.' ~ survey.foodFastfood)|raw }}</li>
+					<li>{{ sett.setting('food.buying.' ~ survey.foodBuying)|raw }}</li>
+					<li>{{ sett.setting('food.chewing.' ~ survey.foodChewing)|raw }}</li>
+					<li>{{ sett.setting('food.drinking.' ~ survey.foodDrinking)|raw }}</li>
+					<li>{{ sett.setting('food.eating.' ~ survey.foodEating)|raw }}</li>
+					<li>{{ sett.setting('food.allowing.' ~ survey.foodAllowing)|raw }}</li>
+					<li>{{ sett.setting('food.tv.' ~ survey.foodTv)|raw }}</li>
+					<li>{{ sett.setting('food.supplements.' ~ survey.foodSupplements)|raw }}</li>
+				</ul>
+
+
+		<hr/>
+
+
+				<h3>Status masy ciała</h3>
+				<div class="alert {% if survey.statusWeight in [3, 4] %}alert-success{% elseif survey.statusWeight == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusWeight|dictionary('status_weight') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('weight.recommend.' ~ survey.statusWeight)|raw }}
+
+		
+		<hr />
+		
+				<h3>Status aktywności fizycznej</h3>
+				<div class="alert {% if survey.statusActivity == 1 %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusActivity|dictionary('status_activity') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('status.activity.' ~ survey.statusActivity)|raw }}
+		
+		<hr/>
+
+				<h3>Status sprawności fizycznej</h3>
+				<div class="alert {% if survey.statusFitness == 1 %}alert-success{% elseif survey.statusFitness == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusFitness|dictionary('status_fitness') }}
+				</div>
+				<h5>Zalecenia</h5>
+				<ul>
+					<li>{% if survey.standRating > 2 %}{{ sett.setting('fitness.stand.good')|raw }}{% else %}{{ sett.setting('fitness.stand.bad')|raw }}{% endif %}</li>
+					<li>{% if survey.alternRunRating > 2 %}{{ sett.setting('fitness.alternrun.good')|raw }}{% else %}{{ sett.setting('fitness.alternrun.bad')|raw }}{% endif %}</li>
+					<li>{% if survey.jumpRating > 2 %}{{ sett.setting('fitness.jump.good')|raw }}{% else %}{{ sett.setting('fitness.jump.bad')|raw }}{% endif %}</li>
+					<li>{% if survey.run20Rating > 2 %}{{ sett.setting('fitness.run20.good')|raw }}{% else %}{{ sett.setting('fitness.run20.bad')|raw }}{% endif %}</li>
+				</ul>
+		
+		<hr/>
+	       
+				<h3>Status nikotynowy</h3>
+				<div class="alert {% if survey.statusNicotine == 1 %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusNicotine|dictionary('status_nicotine') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('nicotine.recommend.' ~ survey.statusNicotine)|raw }}
+		
+		<hr/>
+
+				<h3>Status uodpornienia</h3>
+				<div class="alert {% if survey.statusImmune == 1 %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusImmune|dictionary('status_immune') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('immune.correct.' ~ survey.statusImmune)|raw }}
+
+		
+		<hr/>
+
+				<h3>Status jakości snu i wypoczynku</h3>
+				<div class="alert {% if survey.statusSleep == 1 %}alert-success{% elseif survey.statusSleep == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusSleep|dictionary('status_sleep') }}
+				</div>
+				<h5>Zalecenia</h5>
+				<ul>
+					<li>{{ sett.setting('sleep.problems.' ~ survey.sleepProblems)|raw }}</li>
+					<li>{{ sett.setting('sleep.tired.' ~ survey.sleepTired)|raw }}</li>
+					<li>{{ sett.setting('sleep.awakening.' ~ survey.sleepAwakening)|raw }}</li>
+					<li>{{ sett.setting('sleep.duration.' ~ survey.sleepDuration)|raw }}</li>
+					<li>{{ sett.setting('sleep.breathe.' ~ survey.sleepBreathe)|raw }}</li>
+				</ul>
+		
+		<hr/>
+		
+
+				<h3>Status higieny cyfrowej</h3>
+				<div class="alert {% if survey.statusDigital == 1 %}alert-success{% elseif survey.statusDigital == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusDigital|dictionary('status_digital') }}
+				</div>
+				<h5>Zalecenia</h5>
+				<ul>
+					<li>{{ sett.setting('digital.using.' ~ survey.digitalUsing)|raw }}</li>
+					<li>{{ sett.setting('digital.internet.' ~ survey.digitalInternet)|raw }}</li>
+					<li>{{ sett.setting('digital.games.' ~ survey.digitalGames)|raw }}</li>
+					<li>{{ sett.setting('digital.disturb.' ~ survey.digitalDisturb)|raw }}</li>
+					<li>{{ sett.setting('digital.rewarding.' ~ survey.digitalRewarding)|raw }}</li>
+					<li>{{ sett.setting('digital.time.' ~ survey.digitalTime)|raw }}</li>
+					<li>{{ sett.setting('digital.bored.' ~ survey.digitalBored)|raw }}</li>
+				</ul>
+				{{ sett.setting('status.digital.recommend')|raw }}
+
+		
+		<hr/>
+		
+
+				<h3>Status kompetencji społecznych – styl adaptacji</h3>
+				<div class="alert {% if survey.statusAdaptation == 1 %}alert-success{% elseif survey.statusAdaptation == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusAdaptation|dictionary('status_adaptation') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('status.adaptation.recommend')|raw }}
+
+		
+		<hr/>
+		
+
+				<h3>Zachowania eksternalizacyjne w relacji z otoczeniem</h3>
+				<div class="alert {% if survey.statusExternal == 1 %}alert-success{% elseif survey.statusExternal == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusExternal|dictionary('status_external') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('status.external.recommend')|raw }}
+
+		
+		<hr/>
+	       
+
+				<h3>Status rozwoju emocjonalnego – reakcja na nowość</h3>
+				<div class="alert {% if survey.statusNewness == 1 %}alert-success{% elseif survey.statusNewness == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusNewness|dictionary('status_newness') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('status.newness.recommend')|raw }}
+
+		
+		<hr/>
+	       
+
+				<h3>Status rozwoju emocjonalnego – koncentracja</h3>
+				<div class="alert {% if survey.statusFocus == 1 %}alert-success{% elseif survey.statusFocus == 2 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+					{{ survey.statusFocus|dictionary('status_focus') }}
+				</div>
+				<h5>Zalecenia</h5>
+				{{ sett.setting('status.focus.recommend')|raw }}
+
+	       
+            </div>
+        </div>
+	<div class="row">
+            <div class="col">
+        	<img src="{{ absolute_url(asset('assets/frontend/img/logotypy_unijne.png')) }}" alt="">
+	    </div>
+	</div>
+    </div>
+{% endblock %}
+
+{% block pagejavascript %}
+{% endblock %}

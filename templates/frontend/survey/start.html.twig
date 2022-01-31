@@ -1,0 +1,50 @@
+{% extends 'frontend/layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {{ form_start(form) }}
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.childFirstname) }}
+                        {{ form_widget(form.childFirstname) }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.birthAt) }}
+                        {{ form_widget(form.birthAt) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.gender) }}
+                        {{ form_widget(form.gender) }}
+                    </div>
+                </div>
+
+                {{ form_row(form.submit) }}
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pagejavascript %}
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('input[name="participant[birthAt]"]').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                language: 'pl',
+                startView: 'years',
+                defaultViewDate: '2010-01-01'
+            });
+        });
+    </script>
+{% endblock %}

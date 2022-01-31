@@ -1,0 +1,41 @@
+{#
+Example:
+
+{% import "bundles/A2lixTranslationForm/macros.html.twig" as a2lixTranslations %}
+
+{{ a2lixTranslations.partialTranslations(editForm.translations, ['title','description']) }}
+{{ a2lixTranslations.partialTranslations(editForm.translations, ['url']) }}
+#}
+
+{% macro partialTranslations(form, fieldsNames, tabId) %}
+    {{ form_errors(form) }}
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <li class="{% if app.request.locale == locale %}active{% endif %}">
+                    <a href="#{{ tabId|default('default') }}-{{ translationsFields.vars.id }}_a2lix_translations-fields" data-toggle="tab" role="tab">
+                        <span class="flag-icon flag-icon-{{ locale }} flag-icon-squared"></span>
+                        {{ translationsFields.vars.label|default(locale|humanize)|trans|upper }}
+                        {% if form.vars.default_locale == locale %}{{ '[Default]'|trans }}{% endif %}
+                        {% if translationsFields.vars.required %}*{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="tab-content">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <div id="{{ tabId|default('default') }}-{{ translationsFields.vars.id }}_a2lix_translations-fields" class="tab-pane {% if app.request.locale == locale %}active{% endif %} {% if not form.vars.valid %}sonata-ba-field-error{% endif %}" role="tabpanel">
+                    {% for translationsField in translationsFields|filter(translationsField => translationsField.vars.name in fieldsNames) %}
+                        {{ form_row(translationsField) }}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}

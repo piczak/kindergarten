@@ -1,0 +1,54 @@
+{% set filterName = filter.name %}
+{% set filterNameSlug = filter.name|slugify %}
+{% set currentValue = app.request.get('dtfilter')[filterName]|default() %}
+
+<li filter-name="{{ filterName }}" filter-type="{{ filter.type }}" class="dropdown {% if currentValue %}active{% endif %}">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ filter.label|trans }} <span class="caret"></span></a>
+    <div class="dropdown-menu">
+        <div class="form-group backpack-filter m-b-0">
+            <div class="input-group">
+                <input class="form-control pull-right" id="text-filter-{{ filterNameSlug }}" type="text" value="{{ currentValue }}" />
+                <div class="input-group-addon">
+                    <a class="text-filter-{{ filterNameSlug }}-clear-button" href=""><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+
+<script>
+    jQuery(document).ready(function() {
+        jQuery('#text-filter-{{ filterNameSlug }}').on('change', function(e) {
+            var parameter = 'dtfilter[{{ filterName }}]';
+            var value = jQuery(this).val();
+            var current_url = $.fn.initDataTables.defaults.url;
+
+            var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+            // replace the datatables ajax url with new_url and reload it
+            new_url = normalizeAmpersand(new_url.toString());
+
+            window.location.href = new_url;
+
+            // mark this filter as active in the navbar-filters
+            if (URI(new_url).hasQuery(parameter, true)) {
+                jQuery('li[filter-name={{ filterName }}]').removeClass('active').addClass('active');
+            } else {
+                jQuery('li[filter-name={{ filterName }}]').trigger('filter:clear');
+            }
+        });
+
+        jQuery('li[filter-name={{ filterNameSlug }}]').on('filter:clear', function(e) {
+            jQuery('li[filter-name={{ filterName }}]').removeClass('active');
+            jQuery('#text-filter-{{ filterNameSlug }}').val('');
+        });
+
+        // datepicker clear button
+        jQuery(".text-filter-{{ filterNameSlug }}-clear-button").click(function(e) {
+            e.preventDefault();
+
+            jQuery('li[filter-name={{ filterNameSlug }}]').trigger('filter:clear');
+            jQuery('#text-filter-{{ filterNameSlug }}').val('');
+            jQuery('#text-filter-{{ filterNameSlug }}').trigger('change');
+        });
+    });
+</script>

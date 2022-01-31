@@ -1,0 +1,71 @@
+{% trans_default_domain datatable.translationDomain %}
+
+{% if datatable.hasFilters and globalFilter in ['both', 'beforeTable'] %}
+    {% include '@DataTables/filter.navbar.html.twig' %}
+{% endif %}
+
+<table id="{{ datatable.name }}" class="{% if className is defined and className is not empty %}{{ className }}{% endif %}">
+    <thead>
+        <tr>
+            {% for column in datatable.columns %}
+                <th>{{ column.label|trans|raw }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody></tbody>
+    {% if datatable.hasMassActions %}
+        <tfoot>
+            <tr>
+                <th colspan="{{ datatable.columns|length }}">
+                    <img src="{{ asset('bundles/datatables/img/arrow_ltr.png') }}" />&nbsp;
+                    <select id="massaction-{{ datatable.name }}" class="form-control">
+                        <option value="">-- wybierz --</option>
+                        {% for action in datatable.massActions %}
+                            <option value="{{ action.action }}">{{ action.label }}</option>
+                        {% endfor %}
+                    </select>&nbsp;<button id="massaction-submit-{{ datatable.name }}" class="btn btn-default">Wykonaj</button>
+                </th>
+            </tr>
+        </tfoot>
+    {% endif %}
+</table>
+{% if datatable.hasMassActions %}
+    <script>
+        jQuery(document).ready(function() {
+            jQuery(document).on('click', '#massaction-submit-{{ datatable.name }}', function(e) {
+                e.preventDefault();
+
+                let action = jQuery('#massaction-{{ datatable.name }}').val();
+                if (action === '') {
+                    return false;
+                }
+
+                let values = [];
+                jQuery.each(jQuery('.massaction-checkbox-{{ datatable.name }}:checked'), function() {
+                    values.push(jQuery(this).val());
+                });
+
+                if (values.length === 0) {
+                    Swal.fire({
+                        title: "Uwaga!",
+                        text: "Musisz wybrać rekordy",
+                        type: "warning"
+                    });
+
+                    return false;
+                }
+
+                jQuery.ajax({
+                    url: '{{ datatable.option('massActionHandler') }}',
+                    method: 'POST',
+                    data: {
+                        'action': action,
+                        'ids': values
+                    }
+                }).done(function(data) {
+                    window.location.href = $.fn.initDataTables.defaults.url;
+                });
+            });
+        });
+    </script>
+{% endif %}

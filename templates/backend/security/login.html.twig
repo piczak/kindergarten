@@ -1,0 +1,34 @@
+{% extends '@AdminLTE/layout/security-layout.html.twig' %}
+
+{% block title %}CMS{% endblock %}
+
+{% block logo_login %}Landing Page{% endblock %}
+
+{% block login_box_icon %}{% endblock %}
+
+{% block login_box_msg %}
+    {{ 'Zaloguj się'|trans({}, 'AdminLTEBundle') }}
+{% endblock %}
+
+{% block login_social_auth %}{% endblock %}
+
+{% block login_form %}
+    {#    <form action="{{ path('adminlte_login_check'|route_alias) }}" method="post">#}
+    <form action="" method="post">
+        <div class="form-group has-feedback">
+            <input type="text" name="username" class="form-control" placeholder="{{ 'Username'|trans({}, 'AdminLTEBundle') }}" value="{{ last_username|default('') }}">
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input name="password" type="password" class="form-control" placeholder="{{ 'Password'|trans({}, 'AdminLTEBundle') }}">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group">
+            <input id="remember_me" name="_remember_me" type="checkbox">
+            <label for="remember_me">{{ 'Remember Me'|trans({}, 'AdminLTEBundle') }}</label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">{{ 'Sign In'|trans({}, 'AdminLTEBundle') }}</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'frontend/layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                {% include '@CraueFormFlow/FormFlow/stepList.html.twig' %}
+            </div>
+            <div class="col-9">
+                <div class="alert alert-primary" role="alert">
+                    W każdym pytaniu podaj jedną, najbardziej pasującą odpowiedź.
+                </div>
+                {% if flow.getCurrentStepNumber() == 5 %}
+                <div class="alert alert-info" role="alert">
+                    <a href="http://opz.gdansk.pl/instrukcja-wykonania-pomiarow-ciala-i-testow-sprawnosci/" target="_blank">-TUTAJ-</a> znajdziesz instrukcje do wykonania poniższych pomiarów i zadań.
+                </div>
+                {% endif %}
+            
+                {{ form_start(form) }}
+                    {{ form_errors(form) }}
+
+                    {{ form_rest(form) }}
+
+                    {% include '@CraueFormFlow/FormFlow/buttons.html.twig' with {
+                        craue_formflow_button_class_last: 'btn btn-primary',
+                        craue_formflow_button_class_back: 'btn',
+                        craue_formflow_button_class_reset: 'btn btn-danger',
+                        craue_formflow_button_label_last: 'Dalej',
+                        craue_formflow_button_label_next: 'Dalej',
+                        craue_formflow_button_label_back: 'Wstecz',
+                        craue_formflow_button_label_reset: 'Zacznij od nowa',
+                        craue_formflow_button_label_finish: 'Zakończ'
+
+                    } %}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pagejavascript %}
+{% endblock %}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="keywords" content="{% block meta_keywords %}{{ settings('seo.keywords') }}{% endblock %}" />
+    <meta name="description" content="{% block meta_description %}{{ settings('seo.description') }}{% endblock %}" />
+    <meta property="og:title" content="{% block meta_og_title %}{{ settings('seo.title') }}{% endblock %}" />
+    <meta property="og:description" content="{% block meta_og_description %}{{ block('meta_description') }}{% endblock %}" />
+    <meta property="og:image" content="{% block meta_og_image %}{{ absolute_url(asset('assets/frontend/img/ogimage-placeholder.png')) }}{% endblock %}" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ block('meta_og_title') }}">
+    <meta name="twitter:image" content="{{ block('meta_og_image') }}">
+    <meta name="twitter:description" content="{{ block('meta_og_description') }}">
+
+    <title>{% block meta_title %}{{ settings('seo.title') }}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/flatly/bootstrap.min.css" integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK" crossorigin="anonymous" media="all">
+    {# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" crossorigin="anonymous" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/frontend/css/custom.css')) }}" media="all" />
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="/">
+                <img src="{{ absolute_url(asset('assets/frontend/img/logo.jpg')) }}" alt="{{ settings('seo.title') }}">
+            </a>
+        </nav>
+
+        <div class="row mb-4">
+            <div class="col">
+                {# <div class="title-bar" style="background-color:#1d4c8b;">
+                    <div class="title-wrapper">
+                        <div class="title-captions"> #}
+                            {% block page_title %}
+                                <h1>Zdrowy Przedszkolak</h1>
+                            {% endblock %}
+                        {# </div>
+                    </div>
+                </div> #}
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+    
+</body>
+</html>

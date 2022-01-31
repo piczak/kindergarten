@@ -1,0 +1,70 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% block page_title %}
+    {% trans %}Użytkownicy{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#main-tab" data-toggle="tab">{% trans %}Podstawowe informacje{% endtrans %}</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="main-tab" class="tab-pane active">
+                                    {{ form_row(form.frontend) }}
+                                    {{ form_row(form.country) }}
+                                    {{ form_row(form.username) }}
+                                    {{ form_row(form.email) }}
+                                    {{ form_row(form.firstname) }}
+                                    {{ form_row(form.lastname) }}
+                                    {% if item.avatar.name %}
+                                        <div class="box box-default file-selected-box">
+                                            <div class="box-body">
+                                                <div class="col-md-2">
+                                                    <div class="image-preview">
+                                                        <img class="img-responsive" src="{{ vich_uploader_asset(item, 'avatarFile') }}" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    {{ form_row(form.avatarFileAction) }}
+                                                    <div id="upload-file-handler" class="hidden">
+                                                        {{ form_widget(form.avatarFile) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {{ form_row(form.avatarFile) }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.submit) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function() {
+            jQuery('input[name="admin_edit[avatarFileAction]"]').on('change', function() {
+                if (jQuery(this).val() == 'updateAction') {
+                    jQuery('#upload-file-handler').removeClass('hidden');
+                } else {
+                    jQuery('#upload-file-handler').addClass('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}

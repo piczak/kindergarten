@@ -1,0 +1,37 @@
+<nav class="navbar navbar-default navbar-filters">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle filters</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{% trans %}Filtry{% endtrans %}</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% for filter in datatable.filters %}
+                    {% if filter.templateHtml %}
+                        {% include filter.templateHtml %}
+                    {% endif %}
+                {% endfor %}
+                <li><a href="#" id="remove_filters_button"><i class="fa fa-eraser"></i> {% trans %}Wyczyść filtry{% endtrans %}</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<script>
+    jQuery(document).ready(function() {
+        jQuery("#remove_filters_button").click(function(e) {
+            e.preventDefault();
+
+            var clean_url = '{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}';
+
+            window.location.href = clean_url;
+
+            $(".navbar-filters li[filter-name]").trigger('filter:clear');
+        });
+    });
+</script>

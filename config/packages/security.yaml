@@ -1,0 +1,53 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_EDITOR]
+        ROLE_SUPER_ADMIN: [ROLE_EDITOR, ROLE_ADMIN]
+        ROLE_EDITOR: [ROLE_USER]
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        backend:
+            pattern: ^/admin(.*)
+            provider: app_user_provider
+            form_login:
+                login_path: admin_login
+                check_path: admin_login_check
+                default_target_path: /admin
+            guard:
+                authenticators:
+                    - App\Security\BackendAuthenticator
+            logout:
+                path: admin_logout
+                target: admin_login
+            anonymous: ~
+
+        main:
+            anonymous: true
+            context: frontend
+
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin/denied$, roles: [ROLE_USER, IS_AUTHENTICATED_ANONYMOUSLY], requires_channel: http }
+        - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/admin/logout$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/admin/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/admin/lost-password$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/admin/reset-password(.*)$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_EDITOR], requires_channel: http }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }

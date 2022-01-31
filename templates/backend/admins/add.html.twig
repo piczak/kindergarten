@@ -1,0 +1,41 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% import "bundles/A2lixTranslationForm/macros.html.twig" as a2lixTranslations %}
+
+{% block page_title %}
+    {% trans %}Administratorzy{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#main-tab" data-toggle="tab">
+                                        {% trans %}Podstawowe informacje{% endtrans %}
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="main-tab" class="tab-pane active">
+                                    {{ form_row(form.roles) }}
+                                    {{ form_row(form.email) }}
+                                    {{ form_row(form.firstname) }}
+                                    {{ form_row(form.lastname) }}
+                                    {{ form_row(form.plainPassword) }}
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.submit) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

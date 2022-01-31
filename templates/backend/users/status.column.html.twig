@@ -1,0 +1,11 @@
+<div class="text-center">
+    {% if row.isEnabled %}
+        <a href="{{ path('admin.users.status', {'id': row.id, 'status': constant('App\\Enum\\UserStatus::INACTIVE')}) }}" class="btn btn-xs btn-success ajaxStatus">
+            <i class="fa fa-check"></i>
+        </a>
+    {% else %}
+        <a href="{{ path('admin.users.status', {'id': row.id, 'status': constant('App\\Enum\\UserStatus::ACTIVE')}) }}" class="btn btn-xs btn-danger ajaxStatus">
+            <i class="fa fa-times"></i>
+        </a>
+    {% endif %}
+</div>

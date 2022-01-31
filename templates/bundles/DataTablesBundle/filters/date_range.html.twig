@@ -1,0 +1,145 @@
+{% set filterName = filter.name %}
+{% set filterNameSlug = filter.name|slugify %}
+{% set currentValue = app.request.get('dtfilter')[filterName]|default() %}
+
+{% set functionName = 'applyDateRangeFilter' ~ filterNameSlug|replace({'-': ''}) %}
+{% set startDate = '' %}
+{% set endDate = '' %}
+{% set dateRange = '' %}
+
+{% if currentValue %}
+    {% set dates = currentValue|json_decode %}
+    {% set startDate = dates.from %}
+    {% set endDate = dates.to %}
+    {% set dateRange = dates|join(' ~ ') %}
+    {% set dateRange = dateRange|replace({'-': '/'}) %}
+    {% set dateRange = dateRange|replace({'~': '-'}) %}
+{% endif %}
+
+<li filter-name="{{ filterName }}" filter-type="{{ filter.type }}" class="dropdown {% if currentValue %}active{% endif %}">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ filter.label|trans }} <span class="caret"></span></a>
+    <div class="dropdown-menu">
+        <div class="form-group backpack-filter m-b-0">
+            <div class="input-group date">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input class="form-control pull-right" id="daterangepicker-{{ filterNameSlug }}" type="text" placeholder="{{ dateRange }}" />
+                <div class="input-group-addon">
+                    <a class="daterangepicker-{{ filterNameSlug }}-clear-button" href=""><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+
+
+<style>
+    .input-group.date {
+        width: 320px;
+        max-width: 100%;
+    }
+
+    .daterangepicker.dropdown-menu {
+        z-index: 3001!important;
+    }
+</style>
+
+<script>
+    function {{ functionName }}(start, end) {
+        var parameter = 'dtfilter[{{ filterName }}]';
+        if (start && end) {
+            var dates = {
+                'from': start.format('YYYY-MM-DD'),
+                'to': end.format('YYYY-MM-DD')
+            };
+            var value = JSON.stringify(dates);
+        } else {
+            var value = '';
+        }
+        var current_url = $.fn.initDataTables.defaults.url;
+
+        var new_url = addOrUpdateUriParameter(current_url, parameter, value);
+        // replace the datatables ajax url with new_url and reload it
+        new_url = normalizeAmpersand(new_url.toString());
+
+        window.location.href = new_url;
+
+        // mark this filter as active in the navbar-filters
+        if (URI(new_url).hasQuery(parameter, true)) {
+            $('li[filter-name={{ filterName }}]').removeClass('active').addClass('active');
+        } else {
+            $('li[filter-name={{ filterName }}]').trigger('filter:clear');
+        }
+    }
+
+    jQuery(document).ready(function($) {
+        var dateRangeInput = $('#daterangepicker-{{ filterNameSlug }}')
+            .daterangepicker({
+                    timePicker: false,
+                    "locale": {
+                        "applyLabel": "Zastosuj",
+                        "cancelLabel": "Anuluj",
+                        "fromLabel": "Od",
+                        "toLabel": "Do",
+                        "customRangeLabel": "Własny zakres",
+                        "daysOfWeek": [
+                            "Nie",
+                            "Pon",
+                            "Wto",
+                            "Śro",
+                            "Czw",
+                            "Pią",
+                            "Sob"
+                        ],
+                        "monthNames": [
+                            "Styczeń",
+                            "Luty",
+                            "Marzec",
+                            "Kwiecień",
+                            "Maj",
+                            "Czerwiec",
+                            "Lipiec",
+                            "Sierpień",
+                            "Wrzesień",
+                            "Październik",
+                            "Listopad",
+                            "Grudzień"
+                        ]
+                    },
+                    ranges: {
+                        'Dziś': [moment().startOf('day'), moment().endOf('day')],
+                        'Wczoraj': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Ostatnie 7 dni': [moment().subtract(6, 'days'), moment()],
+                        'Ostatnie 30 dni': [moment().subtract(29, 'days'), moment()],
+                        'Ten miesiąc': [moment().startOf('month'), moment().endOf('month')],
+                        'Ostatni miesiąc': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    {% if currentValue %}
+                    startDate: moment("{{ startDate }}"),
+                    endDate: moment("{{ endDate }}"),
+                    {% endif %}
+                    alwaysShowCalendars: true,
+                    autoUpdateInput: true
+                },
+                function(start, end) {
+                    {{ functionName }}(start, end);
+                });
+
+        jQuery('li[filter-name={{ filterName }}]').on('hide.bs.dropdown', function() {
+            if (jQuery('.daterangepicker').is(':visible')) {
+                return false;
+            }
+        });
+
+        jQuery('li[filter-name={{ filterName }}]').on('filter:clear', function(e) {
+            jQuery('li[filter-name={{ filterName }}]').removeClass('active');
+        });
+
+        // datepicker clear button
+        jQuery(".daterangepicker-{{ filterNameSlug }}-clear-button").click(function(e) {
+            e.preventDefault();
+            {{ functionName }}(null, null);
+        });
+    });
+</script>

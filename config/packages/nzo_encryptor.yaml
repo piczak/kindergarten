@@ -1,0 +1,7 @@
+nzo_encryptor:
+  secret_key: "KRYPTOPOLACYSECRETEY58435U8EIFGNDDSADA453RES" # Required, max length of 100 characters.
+  secret_iv: "65TERTRETREGTDFGDFREWTRETGERGTRE" # Required only if "random_pseudo_bytes" is FALSE. Max length of 100 characters.
+  cipher_algorithm: 'aes-256-ctr' # optional, default: 'aes-256-ctr'
+  base64_encode: true # optional, default: TRUE
+  format_base64_output: true # optional, default: TRUE, used only when 'base64_encode' is set to TRUE
+  random_pseudo_bytes: true # optional, default: TRUE (generate a random encrypted text output each time => MORE SECURE !)

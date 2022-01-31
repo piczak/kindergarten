@@ -1,0 +1,8 @@
+<div class="text-center">
+    <a href="{{ path('admin.links.edit', {'id': row.id}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-pencil-alt"></i>
+    </a>
+    <a href="#" data-href="{{ path('admin.links.delete', {'id': row.id}) }}" class="btn btn-sm btn-danger confirmDelete">
+        <i class="fa fa-trash"></i>
+    </a>
+</div>

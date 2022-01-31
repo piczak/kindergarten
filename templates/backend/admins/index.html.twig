@@ -1,0 +1,39 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% block page_title %}
+    {% trans %}Administratorzy{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="pull-right">
+                        <a href="{{ path('admin.admins.add') }}" class="btn btn-success">
+                            <i class="fa fa-plus"></i> {% trans %}Dodaj{% endtrans %}
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="content-datatable-holder" class="table-responsive">
+                        {% trans %}Proszę czekać, ładowanie danych ....{% endtrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script src="{{ asset('bundles/datatables/js/datatables-column-filter.js') }}"></script>
+    <script>
+        jQuery(function() {
+            jQuery('#content-datatable-holder').initDataTables({{ datatable_settings(datatable) }});
+        });
+    </script>
+{% endblock %}

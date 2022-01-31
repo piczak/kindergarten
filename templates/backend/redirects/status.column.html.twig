@@ -1,0 +1,11 @@
+<div class="text-center">
+    {% if row.isActive %}
+        <a href="{{ path('admin.redirects.status', {'id': row.id, 'status': constant('App\\Enum\\RedirectStatus::INACTIVE')}) }}" class="btn btn-xs btn-success ajaxStatus">
+            <i class="fa fa-check"></i>
+        </a>
+    {% else %}
+        <a href="{{ path('admin.redirects.status', {'id': row.id, 'status': constant('App\\Enum\\RedirectStatus::ACTIVE')}) }}" class="btn btn-xs btn-danger ajaxStatus">
+            <i class="fa fa-times"></i>
+        </a>
+    {% endif %}
+</div>
