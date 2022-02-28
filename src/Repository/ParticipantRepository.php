@@ -2,10 +2,14 @@
 
 namespace App\Repository;
 
+use App\Component\StatisticMapper;
 use App\Entity\Participant;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\FetchMode;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Participant|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,8 +19,10 @@ use Doctrine\DBAL\FetchMode;
  */
 class ParticipantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $mapper;
+    public function __construct(ManagerRegistry $registry, StatisticMapper $mapper)
     {
+        $this->mapper = $mapper;
         parent::__construct($registry, Participant::class);
     }
     
@@ -65,4 +71,110 @@ class ParticipantRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function getChartParticipants(): array
+    {
+        $qb = $this->getParticipantsForChart();
+
+        return $this->prepareData($qb);
+    }
+
+
+    public function getSelectedData(Request $request): array
+    {
+        $kindergartenId = $request->get('kindergartenId');
+        $gender = $request->get('gender');
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+        $qb = $this->getParticipantsForChart();
+
+        if($gender !== 'all') {
+            $qb
+                ->andWhere('p.gender = :gender')
+                ->setParameter('gender', $gender);
+        }
+
+        if($kindergartenId !== 'all') {
+            $qb
+                ->leftJoin('p.kindergarten', 'k')
+                ->andWhere('k.id = :id')
+                ->setParameter('id', $kindergartenId);
+        }
+
+        if($dateFrom != '' && $dateTo != '') {
+            $from  = DateTime::createFromFormat('d.m.Y H:i', $dateFrom);
+            $to  = DateTime::createFromFormat('d.m.Y H:i', $dateTo);
+
+            $qb
+                ->andWhere('p.finishedAt > :from')
+                ->andWhere('p.finishedAt < :to')
+                ->setParameter('from', $from)
+                ->setParameter('to', $to);
+        } elseif($dateFrom != '') {
+            $from  = DateTime::createFromFormat('d.m.Y H:i', $dateFrom);
+            $qb
+                ->andWhere('p.finishedAt  > :from')
+                ->setParameter('from', $from);
+        } elseif($dateTo != '') {
+            $to = DateTime::createFromFormat('d.m.Y H:i', $dateTo);
+            $qb
+                ->andWhere('p.finishedAt  > :to')
+                ->setParameter('to', $to);
+        }
+
+        return $this->prepareData($qb);
+    }
+
+    private function getParticipantsForChart(): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            ->select(
+                '
+                    p.statusFood,
+                    p.statusNicotine,
+                    p.statusImmune,
+                    p.statusSleep,
+                    p.statusDigital,
+                    p.statusAdaptation,
+                    p.statusExternal,
+                    p.statusNewness,
+                    p.statusFocus,
+                    p.statusWeight,
+                    p.statusActivity,
+                    p.statusFitness
+                '
+            );
+    }
+
+    private function prepareData($qb): array
+    {
+        $response = $qb
+            ->getQuery()
+            ->getResult();
+
+        $array = [];
+
+        foreach($response as $element) {
+            foreach($element as $status => $value) {
+                if ($value !== null) {
+                    if(!array_key_exists($status, $array)) {
+                        $array[$status] = [];
+                        $array[$status]['chartTextData'] = $this->mapper->getLegend()[$status];
+                        $array[$status]['statistics'] = [];
+                    }
+
+                    if(!array_key_exists($value,  $array[$status]['statistics'])) {
+                        $array[$status]['statistics'][$value] = 0;
+                    }
+
+                    $array[$status]['statistics'][$value] += 1;
+                }
+            }
+        }
+
+        return $array;
+    }
+
 }

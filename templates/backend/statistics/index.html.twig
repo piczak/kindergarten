@@ -1,0 +1,396 @@
+{% extends 'backend/layout.html.twig' %}
+
+{% trans_default_domain 'messages_backend' %}
+
+{% block page_title %}
+    {% trans %}Statystyki{% endtrans %}
+{% endblock %}
+
+{% block page_content %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class='input-group date' id='dateFrom'>
+                                        <input type='text' id="dateFromInput" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class='input-group date' id='dateTo'>
+                                        <input type='text' id="dateToInput" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <select id="kindergartenList" class="form-select" aria-label="Default select example">
+                                    <option value="all" selected>Wszystkie Przedszkola</option>
+                                    {% for id,name in kindergarten %}
+                                        <option value="{{ id }}">{{ name }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <select id="gender" class="form-select" aria-label="Default select example">
+                                    <option value="all" selected>Obie płcie</option>
+                                    <option value="M">Chłopcy</option>
+                                    <option value="F">Dziewczynki</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-bottom: 20px;"></div>
+
+                        <div id="charts" class="row">
+                            {% for status,value in statisticsData %}
+                                <div class="col-md-6 col-lg-6">
+                                    <span class="statusDescription" id="{{ status }}Span">{{ value.chartTextData.description }}</span>
+                                    <div class="chart" id="{{ status }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/apexcharts/dist/apexcharts.css') }}" rel="stylesheet">
+    <style>
+        .legend-tooltip {
+            left: 25%;
+            bottom: 40%;
+            border: 1px solid black;
+            border-radius: 2px;
+            background-color: #eee;
+            z-index: 1500;
+            font-size: 13px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width:200px;
+        }
+        .apexcharts-legend .apexcharts-align-center .apx-legend-position-bottom {
+            inset: auto 0px -19px 20px !important;
+            position: absolute;
+            max-height: 189.13px;
+        }
+        .chart {
+            margin-bottom: 40px;
+        }
+        .statusDescription {
+            margin-left: 20px;
+            font-size: 16px;
+        }
+        #kindergartenList, #gender {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('assets/vendor/apexcharts/dist/apexcharts.js') }}"></script>
+
+    <script>
+
+        generateChart('{{ statisticsData | json_encode | raw }}')
+
+
+        jQuery(document).on('change', '#kindergartenList', function() {
+            updateChart()
+        });
+
+
+        jQuery(document).on('change', '#gender', function() {
+            updateChart()
+        });
+
+
+
+        $(function () {
+            $('#dateFrom').datetimepicker({
+                locale:'pl'
+            });
+            $('#dateTo').datetimepicker({
+                locale:'pl',
+                useCurrent: false
+            });
+
+            $("#dateFrom").on("dp.change", function (e) {
+                $('#dateTo').data("DateTimePicker").minDate(e.date);
+                updateChart()
+            });
+            $("#dateTo").on("dp.change", function (e) {
+                $('#dateFrom').data("DateTimePicker").maxDate(e.date);
+                updateChart()
+            });
+        });
+
+        function getSelectData()
+        {
+            let kindergartenSelect = document.getElementById("kindergartenList");
+            let kindergartenId = kindergartenSelect.options[kindergartenSelect.selectedIndex].value;
+
+            let genderSelect = document.getElementById("gender");
+            let gender = genderSelect.options[genderSelect.selectedIndex].value;
+
+            let dateFrom = document.getElementById("dateFromInput").value
+            let dateTo = document.getElementById("dateToInput").value
+
+            return {
+                kindergartenId:kindergartenId,
+                gender:gender,
+                dateFrom:dateFrom,
+                dateTo:dateTo
+            }
+        }
+
+        function updateChart()
+        {
+            jQuery.post(Routing.generate('admin.statistics.update', getSelectData()), function (response) {
+                if (response.status === 'success') {
+                    update(JSON.stringify(response.message))
+                } else {
+                }
+            });
+        }
+
+
+        function deleteChild() {
+            let element = document.getElementById("charts");
+            let child = element.lastElementChild;
+            while (child) {
+                element.removeChild(child);
+                child = element.lastElementChild;
+            }
+        }
+
+        function createChartsAnchor()
+        {
+            document.getElementById("charts").innerHTML +=
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusFoodSpan"></span><div class="chart" id="statusFood"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusNicotineSpan"></span><div class="chart" id="statusNicotine"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusImmuneSpan"></span><div class="chart" id="statusImmune"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusSleepSpan"></span><div class="chart" id="statusSleep"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusDigitalSpan"></span><div class="chart" id="statusDigital"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusAdaptationSpan"></span><div class="chart" id="statusAdaptation"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusExternalSpan"></span><div class="chart" id="statusExternal"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusNewnessSpan"></span><div class="chart" id="statusNewness"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusFocusSpan"></span><div class="chart" id="statusFocus"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusWeightSpan"></span><div class="chart" id="statusWeight"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusActivitySpan"></span><div class="chart" id="statusActivity"></div></div>' +
+                '<div class="col-md-6 col-lg-6"><span class="statusDescription" id="statusFitnessSpan"></span><div class="chart" id="statusFitness"></div></div>'
+        }
+
+
+        function update(statisticsData)
+        {
+            deleteChild()
+            createChartsAnchor()
+            generateChart(statisticsData)
+        }
+
+
+        function generateChart(statisticsData)
+        {
+            statisticsData = JSON.parse(statisticsData.replace(/&quot;/g,'"'));
+
+            let legendDataCollection = [];
+
+            $.each(statisticsData, function(key, object) {
+
+                let values = []
+                let amounts = []
+
+                $.each(object, function(keyName, data) {
+                    if(keyName === 'statistics') {
+                        $.each(data, function(value, amount) {
+                            if(value !== undefined) {
+                                values.push(value)
+                                amounts.push(amount)
+                            }
+                        })
+                    }
+                    if(keyName === 'chartTextData') {
+                        legendDataCollection[key] = data
+                    }
+                })
+
+                let options = getOptions({values, amounts})
+
+                let chart = new ApexCharts(document.querySelector("#" + key), options);
+
+                chart.render();
+
+            })
+
+            $.each(statisticsData, function(key, object) {
+                let legendElementsCollection = document.getElementById(key).getElementsByClassName('apexcharts-legend-text');
+                for (let i = 0; i < legendElementsCollection.length; i++) {
+                    let tagToBeUpdated = legendElementsCollection[i];
+                    let legendData = legendDataCollection[key]
+
+
+                    $.each(legendData, function(legendDataKey, legendDataValue) {
+                        if(legendDataKey === 'legend') {
+                            $.each(legendDataValue, function(legendKey, legendValue) {
+                                if(tagToBeUpdated.innerHTML === legendKey) {
+                                    tagToBeUpdated.innerHTML = legendValue
+                                }
+                            })
+                        }
+                        if(legendDataKey === 'description') {
+                            let description = document.getElementById(key + "Span");
+                            description.innerText = legendDataValue
+                        }
+                    })
+                }
+            })
+
+            let apexchartsLegendTagCollection = document.getElementsByClassName('apexcharts-legend');
+
+            for (let i = 0; i < apexchartsLegendTagCollection.length; i++) {
+                let tagToBeUpdated = apexchartsLegendTagCollection[i];
+                tagToBeUpdated.style.inset = "auto 0px -2px 5px";
+                tagToBeUpdated.style.position = "relative";
+                tagToBeUpdated.style.fontSize = "10px"
+            }
+        }
+
+        function getOptionsCollection(statisticsData)
+        {
+            let result = [];
+
+            $.each(statisticsData, function(key, object) {
+                let values = []
+
+                let amounts = []
+
+                $.each(object, function(keyName, statistics) {
+                    $.each(statistics, function(value, amount) {
+                        if (value !== undefined) {
+                            values.push(value)
+                            amounts.push(amount)
+                        }
+                    })
+                })
+
+                result.push({values, amounts})
+            })
+
+            return result;
+        }
+
+        function getOptions(data)
+        {
+            return {
+                chart: {
+                    type: 'bar',
+                    dropShadow: {
+                        enabled: true,
+                        enabledOnSeries: undefined,
+                        top: 10,
+                        left: 10,
+                        blur: 2,
+                        color: '#000',
+                        opacity: 0.40
+                    }
+                },
+                series: [{
+                    name: 'liczba dzieci',
+                    data: data.amounts
+                }],
+                xaxis: {
+                    categories: data.values,
+                    labels: {
+                        show: false,
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: "horizontal",
+                        shadeIntensity: 0.5,
+                        gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 50, 100],
+                        colorStops: []
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        distributed: true,
+                        dataLabels: {
+                            position: 'center'
+                        }
+                    }
+                },
+                legend: {
+                    show: true,
+                    showForSingleSeries: false,
+                    showForNullSeries: true,
+                    showForZeroSeries: true,
+                    position: 'top',
+                    horizontalAlign: 'left',
+                    floating: false,
+                    fontSize: '12px',
+                    fontFamily: 'Helvetica, Arial',
+                    fontWeight: 400,
+                    formatter: undefined,
+                    inverseOrder: false,
+                    width: undefined,
+                    height: undefined,
+                    tooltipHoverFormatter: undefined,
+                    customLegendItems: [],
+                    offsetX: 0,
+                    offsetY: 0,
+                    labels: {
+                        colors: undefined, useSeriesColors: false,
+                        style: {
+                            colors: [],
+                            fontSize: '12px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 200,
+                            cssClass: 'apexcharts-legend',
+                        },
+                    },
+                    markers: {
+                        width: 12, height: 12, strokeWidth: 0, strokeColor: '#fff', fillColors: undefined, radius: 12, customHTML: undefined, onClick: undefined, offsetX: 0, offsetY: 0
+                    },
+                    itemMargin: {
+                        horizontal: 5, vertical: 0
+                    },
+                    onItemClick: {
+                        toggleDataSeries: true
+                    },
+                    onItemHover: {
+                        highlightDataSeries: true
+                    },
+                }
+            }
+        }
+    </script>
+
+{% endblock %}

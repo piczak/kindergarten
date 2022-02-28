@@ -47,4 +47,19 @@ class KindergartenRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllKindergarten()
+    {
+        $result = $this->createQueryBuilder('k')
+            ->select('k.id, k.name')
+            ->getQuery()
+            ->getResult();
+
+        $response = [];
+        foreach ($result as $array) {
+            $response[$array['id']] = $array['name'];
+        }
+
+        return $response;
+    }
 }

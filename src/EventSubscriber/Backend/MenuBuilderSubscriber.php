@@ -53,6 +53,9 @@ class MenuBuilderSubscriber implements EventSubscriberInterface
         //Linki
         $event->addItem(new MenuItemModel('menu-links-item', 'Linki', 'admin.links.index', [], 'fas fa-bars'));
 
+        //Statistics
+        $event->addItem(new MenuItemModel('menu-statistics-item', 'Statystyki', 'admin.statistics.index', [], 'fas fa-bars'));
+
         //Uczestnicy
         $event->addItem(new MenuItemModel('menu-participants-item', 'Uczestnicy', 'admin.participants.index', [], 'fas fa-bars'));
 
