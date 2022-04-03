@@ -1,4 +1,5 @@
-/vendor/
+vendor/
+public/
 var/cache/
 var/log/
 .idea/
