@@ -4,10 +4,10 @@ namespace App\Controller\Backend;
 
 use App\DataTable\Backend\ParticipantTableType;
 use App\Entity\Participant;
+use DateTime;
 use League\Csv\Writer;
 use League\Csv\ByteSequence;
 use App\Form\Backend\ParticipantType;
-use App\Form\Backend\SchoolType;
 use Omines\DataTablesBundle\DataTableFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ParticipantController extends AbstractController
 {
+    private const DATES_KEYS = ['created_at', 'updated_at', 'expire_at', 'finished_at', 'birth_at'];
+
     /**
      * @var DataTableFactory
      */
@@ -146,6 +148,9 @@ class ParticipantController extends AbstractController
         
         $records = [];
         foreach ($items as $it) {
+            foreach(self::DATES_KEYS as $dateKey) {
+                $it[$dateKey] = substr($it[$dateKey], 0, 10);
+            }
             $records[] = array_values($it);
         }
 

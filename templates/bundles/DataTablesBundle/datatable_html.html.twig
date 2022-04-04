@@ -10,14 +10,16 @@
             {% for column in datatable.columns %}
                 {% if  column.name == "kindergarten"%}
                     <th>Nazwa</th>
-                {% elseif  column.name == "endAt"%}
+                {% elseif  column.name == "startAt"%}
                     <th>Data od</th>
-                {% elseif  column.name == "linkAction"%}
+                {% elseif  column.name == "endAt"%}
                     <th>Data do</th>
-                {% elseif  column.name == "rowAction"%}
+                {% elseif  column.name == "linkAction"%}
                     <th>Link</th>
+                {% elseif  column.name == "rowAction"%}
+                    <th>---</th>
                 {% endif %}
-{#                <th>{{ column.label|trans|raw }}</th>#}
+{#                <th>{{ column.name|trans|raw }}</th>#}
             {% endfor %}
         </tr>
     </thead>

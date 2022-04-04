@@ -37,6 +37,22 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <select id="ageFrom" class="form-select" aria-label="Default select example">
+                                    <option value="all" selected>wiek od</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                </select>
+
+                                <select id="ageTo" class="form-select" aria-label="Default select example">
+                                    <option value="all" selected>wiek do</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                </select>
+
                                 <select id="kindergartenList" class="form-select" aria-label="Default select example">
                                     <option value="all" selected>Wszystkie Przedszkola</option>
                                     {% for id,name in kindergarten %}
@@ -124,7 +140,13 @@
             updateChart()
         });
 
+        jQuery(document).on('change', '#ageFrom', function() {
+            updateChart()
+        });
 
+        jQuery(document).on('change', '#ageTo', function() {
+            updateChart()
+        });
 
         $(function () {
             $('#dateFrom').datetimepicker({
@@ -156,11 +178,18 @@
             let dateFrom = document.getElementById("dateFromInput").value
             let dateTo = document.getElementById("dateToInput").value
 
+            let ageFromSelect = document.getElementById("ageFrom");
+            let ageFrom = ageFromSelect.options[ageFromSelect.selectedIndex].value;
+            let ageToSelect = document.getElementById("ageTo");
+            let ageTo = ageToSelect.options[ageToSelect.selectedIndex].value;
+
             return {
                 kindergartenId:kindergartenId,
                 gender:gender,
                 dateFrom:dateFrom,
-                dateTo:dateTo
+                dateTo:dateTo,
+                ageFrom:ageFrom,
+                ageTo:ageTo
             }
         }
 

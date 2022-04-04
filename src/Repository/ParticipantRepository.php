@@ -87,8 +87,38 @@ class ParticipantRepository extends ServiceEntityRepository
         $gender = $request->get('gender');
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo');
+        $ageFrom = $request->get('ageFrom');
+        $ageTo = $request->get('ageTo');
 
         $qb = $this->getParticipantsForChart();
+
+        $now = new DateTime('now');
+        $from = clone($now);
+        $to = clone($now);
+
+        if($ageFrom != 'all' && $ageTo != 'all') {
+            $from->modify('-'.$ageFrom.' year');
+            $from->format('d.m.Y H:i');
+            $to->modify('-'.$ageTo.' year');
+            $to->format('d.m.Y H:i');
+            $qb
+                ->andWhere('p.birthAt < :from')
+                ->andWhere('p.birthAt > :to')
+                ->setParameter('from', $from)
+                ->setParameter('to', $to);
+        } elseif($ageFrom != 'all') {
+            $from->modify('-'.$ageFrom.' year');
+            $from->format('d.m.Y H:i');
+            $qb
+                ->andWhere('p.birthAt  < :from')
+                ->setParameter('from', $from);
+        } elseif($ageTo != 'all') {
+            $to->modify('-'.$ageTo.' year');
+            $to->format('d.m.Y H:i');
+            $qb
+                ->andWhere('p.birthAt  > :to')
+                ->setParameter('to', $to);
+        }
 
         if($gender !== 'all') {
             $qb
@@ -120,7 +150,7 @@ class ParticipantRepository extends ServiceEntityRepository
         } elseif($dateTo != '') {
             $to = DateTime::createFromFormat('d.m.Y H:i', $dateTo);
             $qb
-                ->andWhere('p.finishedAt  > :to')
+                ->andWhere('p.finishedAt  < :to')
                 ->setParameter('to', $to);
         }
 
